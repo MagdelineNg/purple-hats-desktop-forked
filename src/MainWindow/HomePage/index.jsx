@@ -52,7 +52,7 @@ const HomePage = ({ appVersion, setCompletedScanId }) => {
 
   const startScan = async (scanDetails) => {
     scanDetails.browser = browser;
-    
+
     if (scanDetails.scanUrl.length === 0) {
       setPrevUrlErrorMessage("URL cannot be empty.");
       return;
@@ -69,6 +69,7 @@ const HomePage = ({ appVersion, setCompletedScanId }) => {
     window.localStorage.setItem("scanDetails", JSON.stringify(scanDetails));
 
     navigate("/scanning");
+    console.log(scanDetails); 
     const response = await services.startScan(scanDetails);
     console.log(response.success);
 

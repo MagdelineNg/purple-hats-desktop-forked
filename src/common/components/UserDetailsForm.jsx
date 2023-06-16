@@ -2,7 +2,6 @@ const UserDetailsForm = ({
     formID, 
     setName, 
     setEmail,
-    userInputErrorMessage,
     handleSetUserData
 }) => {
     return (
@@ -17,7 +16,6 @@ const UserDetailsForm = ({
                     <input className="user-form-input" type="text" id="email" onChange={(e) => setEmail(e.target.value)}></input>
                 </div>
               </form>
-            {userInputErrorMessage && (<p className="error-text">{userInputErrorMessage}</p>)}
         </div>
     );
 }

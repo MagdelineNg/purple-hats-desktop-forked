@@ -22,7 +22,7 @@ const startScan = async (scanDetails) => {
     device,
     viewportWidth,
     scanInBackground,
-    browerBased
+    browser
   } = scanDetails;
 
   currentScanUrl = scanUrl;
@@ -32,7 +32,7 @@ const startScan = async (scanDetails) => {
     scanType: scanTypes[selectedScanType],
     url: scanUrl,
     headlessMode: scanInBackground,
-    browerBased: browerBased
+    browser: browser,
   };
 
   if (selectedScanType !== Object.keys(scanTypes)[2]) {
@@ -40,9 +40,9 @@ const startScan = async (scanDetails) => {
   }
 
   if (viewport === viewportTypes[1]) {
-    scanArgs.customDevice = Object.keys(devices)[0];
+    scanArgs.customDevice = "Mobile";
   }
-
+  
   if (viewport === viewportTypes[2]) {
     scanArgs.customDevice = devices[device];
   }
@@ -65,40 +65,40 @@ const downloadResults = async (scanId) => {
 };
 
 const getUserData = async () => {
-  const userData = await window.services.getUserData(); 
+  const userData = await window.services.getUserData();
   return userData;
-}
+};
 
 const getDataForForm = async () => {
   const userData = await getUserData();
-  const email = userData['email']; 
-  const name = userData['name'];
-  const autoSubmit = userData['autoSubmit'];
-  const event = userData['event'];
-  const browser = userData['browser'];
+  const email = userData["email"];
+  const name = userData["name"];
+  const autoSubmit = userData["autoSubmit"];
+  const event = userData["event"];
+  const browser = userData["browser"];
   return {
-    websiteUrl: currentScanUrl, 
-    scanType: currentScanType, 
-    email: email, 
+    websiteUrl: currentScanUrl,
+    scanType: currentScanType,
+    email: email,
     name: name,
-    autoSubmit: autoSubmit, 
+    autoSubmit: autoSubmit,
     event: event,
-    browser: browser
-  }
+    browser: browser,
+  };
 };
 
 const isValidEmail = (email) => {
-  let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+  let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
   return regex.test(email);
-}
+};
 
 const services = {
   startScan,
   openReport,
   downloadResults,
-  getUserData, 
+  getUserData,
   getDataForForm,
-  isValidEmail
+  isValidEmail,
 };
 
 export default services;

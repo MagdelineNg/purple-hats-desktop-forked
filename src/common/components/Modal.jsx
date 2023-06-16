@@ -12,6 +12,7 @@ const Modal = ({
     modalDesc,
     pageIndicator,
     key,
+    // userInputErrorMessage
 }) => {
   const showHideClassName = show ? "modal display-flex" : "modal display-none";
   return (
@@ -34,6 +35,7 @@ const Modal = ({
           {isTopTitle && <h3 className="modal-title">{modalTitle}</h3>}
           {modalBody}
           {!isTopTitle && <h3 className="modal-title">{modalTitle}</h3>}
+          {/* {userInputErrorMessage && (<p className="error-text">{userInputErrorMessage}</p>)} */}
           {modalDesc && <p className="modal-desc">{modalDesc}</p>}
         </div>
             {pageIndicator && <div className="page-indicator">{pageIndicator}</div>}

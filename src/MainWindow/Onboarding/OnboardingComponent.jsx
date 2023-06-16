@@ -143,7 +143,6 @@ const OnboardingComponent = ({
               formID={formID}
               setName={setName}
               setEmail={setEmail}
-              userInputErrorMessage={userInputErrorMessage}
               handleSetUserData={handleSetUserData}
             ></UserDetailsForm>
           }
@@ -157,6 +156,7 @@ const OnboardingComponent = ({
           pageIndicator={
               <img className="modal-img" src={firstTimer4Circle} ></img>
           }
+          // userInputErrorMessage={userInputErrorMessage}
           modalFooter={
             <>
               {backButton}

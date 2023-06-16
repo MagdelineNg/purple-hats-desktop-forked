@@ -2,15 +2,21 @@ const { BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { fork } = require("child_process");
 const fs = require("fs");
+const os = require("os");
 const { randomUUID } = require("crypto");
 const {
   enginePath,
   getPathVariable,
   customFlowGeneratedScriptsPath,
   playwrightBrowsersPath,
-  resultsPath
+  resultsPath,
 } = require("./constants");
-
+const {
+  browserTypes,
+  getDefaultChromeDataDir,
+  getDefaultEdgeDataDir,
+} = require("./constants");
+const { env } = require("process");
 const scanHistory = {};
 
 let currentChildProcess;
@@ -22,8 +28,15 @@ const killChildProcess = () => {
 };
 
 const getScanOptions = (details) => {
-  const { scanType, url, customDevice, viewportWidth, maxPages, headlessMode, browser } =
-    details;
+  const {
+    scanType,
+    url,
+    customDevice,
+    viewportWidth,
+    maxPages,
+    headlessMode,
+    browser,
+  } = details;
   const options = ["-c", scanType, "-u", url];
 
   if (customDevice) {
@@ -45,13 +58,21 @@ const getScanOptions = (details) => {
   if (browser) {
     options.push("-b", browser);
   }
-  
+
   return options;
 };
 
 const startScan = async (scanDetails) => {
   const { scanType, url } = scanDetails;
   console.log(`Starting new ${scanType} scan at ${url}.`);
+
+  let useChromium = false;
+  if (
+    scanDetails.browser === browserTypes.chromium ||
+    (!getDefaultChromeDataDir() && !getDefaultEdgeDataDir())
+  ) {
+    useChromium = true;
+  }
 
   const response = await new Promise((resolve) => {
     const scan = fork(
@@ -61,23 +82,24 @@ const startScan = async (scanDetails) => {
         silent: true,
         cwd: resultsPath,
         env: {
-          PLAYWRIGHT_BROWSERS_PATH: `${playwrightBrowsersPath}`,
+          ...process.env,
+          RUNNING_FROM_PH_GUI: true,
+          ...(useChromium && {
+            PLAYWRIGHT_BROWSERS_PATH: `${playwrightBrowsersPath}`,
+          }),
           PATH: getPathVariable(),
         },
       }
     );
 
     currentChildProcess = scan;
-    // scan.stdout.on('data', (chunk) => {
-    //   console.log(chunk.toString());
-    // })
 
     scan.on("exit", (code) => {
       const stdout = scan.stdout.read().toString().trim();
       if (code === 0) {
         // Output from combine.js which prints the string "No pages were scanned" if crawled URL <= 0
         if (stdout.includes("No pages were scanned")) {
-          resolve({success: false})
+          resolve({ success: false });
         }
 
         const resultsPath = stdout
@@ -95,11 +117,13 @@ const startScan = async (scanDetails) => {
         resolve({ success: false, statusCode: code, message: stdout });
       }
       currentChildProcess = null;
-      
+
       if (fs.existsSync(customFlowGeneratedScriptsPath)) {
-        fs.rm(customFlowGeneratedScriptsPath, { recursive: true }, err => {
+        fs.rm(customFlowGeneratedScriptsPath, { recursive: true }, (err) => {
           if (err) {
-            console.error(`Error while deleting ${customFlowGeneratedScriptsPath}.`);
+            console.error(
+              `Error while deleting ${customFlowGeneratedScriptsPath}.`
+            );
           }
         });
       }
@@ -110,18 +134,22 @@ const startScan = async (scanDetails) => {
 };
 
 const getReportPath = (scanId) => {
+  const reportPath = os.platform() === "win32" ? resultsPath : enginePath;
+
   if (scanHistory[scanId]) {
-    return path.join(enginePath, scanHistory[scanId], "reports", "report.html");
+    return path.join(reportPath, scanHistory[scanId], "reports", "report.html");
   }
   return null;
 };
 
 const getResultsZipPath = (scanId) => {
+  const reportPath = os.platform() === "win32" ? resultsPath : enginePath;
+
   if (scanHistory[scanId]) {
-    return path.join(enginePath, 'a11y-scan-results.zip');
+    return path.join(reportPath, "a11y-scan-results.zip");
   }
   return null;
-}
+};
 
 const getResultsZip = (scanId) => {
   const resultsZipPath = getResultsZipPath(scanId);

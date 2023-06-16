@@ -11,6 +11,7 @@ export const viewportTypes = [
   "Custom width...",
 ];
 
+// key is what will be displayed on the GUI, value is the internal value that Playwright recognises
 export const devices = {
   "Blackberry PlayBook": "Blackberry PlayBook",
   "BlackBerry Z30": "BlackBerry Z30",

@@ -13,6 +13,7 @@
 }
 
 .error-text {
+  margin: 0;
   color: #D7260F;
 }
 
@@ -109,6 +110,7 @@ a:hover {
   }
 
   .modal-content {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
