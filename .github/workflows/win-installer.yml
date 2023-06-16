@@ -39,12 +39,24 @@ jobs:
             Expand-Archive -Path $FEdestinationPath -DestinationPath $FEextractPath -Force
             Remove-Item -Path $FEdestinationPath
 
-        #open purplehats.exe
-        #might need to close 
+        - name: Run Purple HATS Frontend
+          run: |
+            cd "$env:APPDATA\Purple HATS-win32-x64"
+            ".\Purple HATS.exe"
 
-        - name: Move Inno Setup script to APPDATA
+        - name: Download Inno Setup 
           shell: pwsh
-          run : Move-Item -Path "$current_path\hats_for_windows.iss" -Destination "$env:APPDATA\hats_for_windows.iss" -Force
+          run: |
+            Invoke-WebRequest -Uri "https://jrsoftware.org/download.php/is.exe" -OutFile "$env:APPDATA\is.exe" -Verb runas
+            $env:path = "$env:path" + ";${env:programfiles(x86)}\Inno Setup 6"
+
+        - name: Execute Inno Setup script to run installer
+        shell: pwsh
+        run: ISCC /O"${env:APPDATA}" "./hats_for_windows.iss"
+
+        # - name: Move Inno Setup script to APPDATA
+        #   shell: pwsh
+        #   run : Move-Item -Path "$current_path\hats_for_windows.iss" -Destination "$env:APPDATA\hats_for_windows.iss" -Force
 
         
         
