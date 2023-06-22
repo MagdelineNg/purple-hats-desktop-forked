@@ -1,0 +1,69 @@
+name: Windows installer
+
+on: workflow_dispatch
+
+jobs:
+    build-win-installer:
+      runs-on: windows-latest
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        # - name: Copy scripts to parent directory
+        #   run: cp ${{github.workspace}}/installer.ps1 ${{github.workspace}}    
+
+        # - name: Run Powershell script for windows installer
+        #   shell: pwsh
+        #   run: powershell.exe -NoProfile -ExecutionPolicy Bypass "& ${{github.workspace}}\installer.ps1"     
+        #   working-directory:  ${{github.workspace}}
+
+        - name: Download Purple HATS Backend
+          shell : pwsh
+          run: |
+            $PHbackendUrl = "https://github.com/GovTechSG/purple-hats/releases/latest/download/purple-hats-portable-windows.zip"
+            $BEdestinationPath = "$env:APPDATA\PHLatest.zip"
+            $BEextractPath = "$env:APPDATA\Purple HATS Backend"
+            Invoke-WebRequest -Uri $PHbackendUrl -OutFile $BEdestinationPath
+            Expand-Archive -Path $BEdestinationPath -DestinationPath $BEextractPath -Force
+            Remove-Item -Path $BEdestinationPath
+
+        - name: Download Purple HATS Frontend
+          shell : pwsh
+          run: |
+            $PHfrontendUrl = "https://github.com/GovTechSG/purple-hats-desktop/releases/latest/download/purple-hats-desktop-windows-prod.zip"
+            $FEdestinationPath = "$env:APPDATA\Purple HATS-win32-x64.zip"
+            $FEextractPath = "$env:APPDATA\Purple HATS-win32-x64"
+            Invoke-WebRequest -Uri $PHfrontendUrl -OutFile $FEdestinationPath
+            Expand-Archive -Path $FEdestinationPath -DestinationPath $FEextractPath -Force
+            Remove-Item -Path $FEdestinationPath
+
+        - name: Run Purple HATS Frontend
+          run: |
+            cd "$env:APPDATA\Purple HATS-win32-x64"
+            ".\Purple HATS.exe"
+
+        - name: Download Inno Setup 
+          shell: pwsh
+          run: |
+            Invoke-WebRequest -Uri "https://jrsoftware.org/download.php/is.exe" -OutFile "$env:APPDATA\is.exe" 
+            $env:path = "$env:path" + ";${env:programfiles(x86)}\Inno Setup 6"
+
+        - name: Move Inno Setup script to APPDATA
+          shell: pwsh
+          run : Copy-Item -Path "./hats_for_windows.iss" -Destination "$env:APPDATA\hats_for_windows.iss" -Force
+
+        - name: Execute Inno Setup script to run installer
+          shell: pwsh
+          run: ISCC /O"${env:APPDATA}" "$env:APPDATA\hats_for_windows.iss"
+
+        - name: Upload Purple HATS setup artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: purple-hats-portable-mac
+            path: $PROGRAMFILES\Purple HATS Desktop\Purple HATS Frontend\Purple HATS.exe
+
+
+        
+          
+        
