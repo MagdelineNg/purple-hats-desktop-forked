@@ -61,18 +61,25 @@ jobs:
           run: |
            ls $env:APPDATA
 
-        - name: Compress Executable
-          shell: pwsh
+        # - name: Compress Executable
+        #   shell: pwsh
+        #   run: |
+        #     $sourcePath = "$env:APPDATA\mysetup.exe"
+        #     $destinationPath = "$env:APPDATA\mysetup.zip"
+        #     Compress-Archive -Path $sourcePath -DestinationPath $destinationPath -Force
+
+        - name: Create folder
           run: |
-            $sourcePath = "$env:APPDATA\mysetup.exe"
-            $destinationPath = "$env:APPDATA\mysetup.zip"
-            Compress-Archive -Path $sourcePath -DestinationPath $destinationPath -Force
+            cd $env:APPDATA
+            mkdir setup
+            move mysetup.exe setup/mysetup.exe
+
 
         - name: Upload Purple HATS setup artifact
           uses: actions/upload-artifact@v3
           with:
             name: purpleHATSSetup
-            path: $env:APPDATA/mysetup.zip
+            path: $env:APPDATA/setup
 
 
         
