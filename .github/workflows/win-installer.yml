@@ -87,10 +87,10 @@ jobs:
             path: $env:APPDATA
 
         - name: Upload Purple HATS setup artifact 2
-        uses: actions/upload-artifact@v3
-        with:
-          name: purpleHATSSetup2
-          path: ${{ env.APPDATA }}/setup
+          uses: actions/upload-artifact@v3
+          with:
+            name: purpleHATSSetup2
+            path: ${{ env.APPDATA }}/setup
 
 
         
