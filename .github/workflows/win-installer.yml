@@ -71,7 +71,7 @@ jobs:
         - name: Upload Purple HATS setup artifact
           uses: actions/upload-artifact@v3
           with:
-            name: purpleHATSSetup.exe
+            name: purpleHATSSetup
             path: $env:PROGRAMFILES\Purple HATS Desktop\Purple HATS Frontend\Purple HATS.exe
 
 
