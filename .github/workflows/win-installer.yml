@@ -79,11 +79,11 @@ jobs:
         - name: Get AppData Directory
           run: echo ("APPDATA_DIR=" + $env:APPDATA) >> $env:GITHUB_ENV
 
-        - name: Upload Purple HATS setup artifact
-          uses: actions/upload-artifact@v3
-          with:
-            name: purpleHATSSetup
-            path: ${{ env.APPDATA_DIR }}
+        # - name: Upload Purple HATS setup artifact
+        #   uses: actions/upload-artifact@v3
+        #   with:
+        #     name: purpleHATSSetup
+        #     path: ${{ env.APPDATA_DIR }}
 
         - name: Upload Purple HATS setup artifact 2
           uses: actions/upload-artifact@v3
