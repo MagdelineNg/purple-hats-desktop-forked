@@ -13,6 +13,7 @@ AppSupportURL=https://github.com/GovTechSG/purple-hats-desktop
 AppUpdatesURL=https://github.com/GovTechSG/purple-hats-desktop
 DefaultDirName=C:\Program Files\Purple HATS Desktop
 DisableDirPage=yes
+OutputDir= .
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
 LicenseFile=Purple HATS-win32-x64\Purple HATS-win32-x64\LICENSE
