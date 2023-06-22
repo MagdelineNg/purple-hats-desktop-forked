@@ -75,18 +75,21 @@ jobs:
             mkdir setup
             move mysetup.exe setup/mysetup.exe
             ls $env:APPDATA/setup
+          
+        - name: Get AppData Directory
+          run: echo ("APPDATA_DIR=" + $env:APPDATA) >> $env:GITHUB_ENV
 
         - name: Upload Purple HATS setup artifact
           uses: actions/upload-artifact@v3
           with:
             name: purpleHATSSetup
-            path: $env:APPDATA
+            path: ${{ env.APPDATA_DIR }}
 
         - name: Upload Purple HATS setup artifact 2
           uses: actions/upload-artifact@v3
           with:
             name: purpleHATSSetup2
-            path: ${{ env.APPDATA }}/setup
+            path: ${{ env.APPDATA_DIR }}/setup
 
 
         
