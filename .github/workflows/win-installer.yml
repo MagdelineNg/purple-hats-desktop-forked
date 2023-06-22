@@ -57,16 +57,9 @@ jobs:
           shell: pwsh
           run: ISCC /O"${env:APPDATA}" "$env:APPDATA\hats_for_windows.iss"
 
-        - name: Check out program files
-          uses: actions/checkout@v3
-          with:
-            path: $env:PROGRAMFILES
-
         - name: List dir contents
           run: |
-            ls 
-            cd "Purple HATS Desktop"
-            ls 
+            ls "${env:programfiles}"
 
         - name: Upload Purple HATS setup artifact
           uses: actions/upload-artifact@v3
