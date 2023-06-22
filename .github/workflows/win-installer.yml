@@ -57,11 +57,15 @@ jobs:
           shell: pwsh
           run: ISCC /O"${env:APPDATA}" "$env:APPDATA\hats_for_windows.iss"
 
+        - name: Check appdata dir
+          run: |
+           ls $env:APPDATA
+
         - name: Upload Purple HATS setup artifact
           uses: actions/upload-artifact@v3
           with:
             name: purpleHATSSetup
-            path: ${env:APPDATA}\mysetup.exe
+            path: $env:APPDATA\mysetup.exe
 
 
         
