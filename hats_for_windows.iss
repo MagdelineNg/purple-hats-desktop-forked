@@ -53,3 +53,7 @@ Filename: "{app}\Purple HATS Frontend\Purple HATS.exe"; Description: "{cm:Launch
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\Purple HATS Frontend"
 Type: filesandordirs; Name: "{app}\Purple HATS Backend"
+
+[InstallDelete]
+Type: files; Name: {app}\Purple HATS Frontend\*
+Type: files; Name: {app}\Purple HATS Backend\*

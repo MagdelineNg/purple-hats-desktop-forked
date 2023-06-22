@@ -68,14 +68,10 @@ jobs:
         #     $destinationPath = "$env:APPDATA\mysetup.zip"
         #     Compress-Archive -Path $sourcePath -DestinationPath $destinationPath -Force
 
-        - name: Checkout APPDATA
-          uses: actions/checkout@v3   
-          with:
-            path: $env:APPDATA 
-
         - name: Create folder
           run: |
             cd $env:APPDATA
+            dir
             mkdir setup
             move mysetup.exe setup/mysetup.exe
             ls $env:APPDATA/setup
