@@ -68,18 +68,29 @@ jobs:
         #     $destinationPath = "$env:APPDATA\mysetup.zip"
         #     Compress-Archive -Path $sourcePath -DestinationPath $destinationPath -Force
 
+        - name: Checkout APPDATA
+          uses: actions/checkout@v3   
+          with:
+            path: $env:APPDATA 
+
         - name: Create folder
           run: |
             cd $env:APPDATA
             mkdir setup
             move mysetup.exe setup/mysetup.exe
-
+            ls $env:APPDATA/setup
 
         - name: Upload Purple HATS setup artifact
           uses: actions/upload-artifact@v3
           with:
             name: purpleHATSSetup
-            path: $env:APPDATA/setup
+            path: $env:APPDATA
+
+        - name: Upload Purple HATS setup artifact 2
+        uses: actions/upload-artifact@v3
+        with:
+          name: purpleHATSSetup2
+          path: ${{ env.APPDATA }}/setup
 
 
         

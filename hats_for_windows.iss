@@ -29,8 +29,17 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+[Code]
+procedure TaskKill(FileName: String);
+var
+  ResultCode: Integer;
+begin
+    Exec('taskkill.exe', '/f /im ' + '"' + FileName + '"', '', SW_HIDE,
+     ewWaitUntilTerminated, ResultCode);
+end;
+
 [Files]
-Source: "Purple HATS-win32-x64\*"; DestDir: "{app}\Purple HATS Frontend"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Purple HATS-win32-x64\*"; DestDir: "{app}\Purple HATS Frontend"; Flags: ignoreversion recursesubdirs createallsubdirs; 
 Source: "Purple HATS Backend\*"; DestDir: "{app}\Purple HATS Backend"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -39,7 +48,7 @@ Name: "{autoprograms}\Purple HATS Desktop"; Filename: "{app}\Purple HATS Fronten
 Name: "{autodesktop}\Purple HATS Desktop"; Filename: "{app}\Purple HATS Frontend\Purple HATS.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\Purple HATS Frontend\Purple HATS.exe"; Description: "{cm:LaunchProgram,Purple HATS Desktop}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Purple HATS Frontend\Purple HATS.exe"; Description: "{cm:LaunchProgram,Purple HATS Desktop}"; Flags: nowait postinstall skipifsilent; ; BeforeInstall: TaskKill('Purple HATS.exe')
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\Purple HATS Frontend"
