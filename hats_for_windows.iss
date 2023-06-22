@@ -15,7 +15,7 @@ DefaultDirName=C:\Program Files\Purple HATS Desktop
 DisableDirPage=yes
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
-LicenseFile=Purple HATS-win32-x64\LICENSE
+LicenseFile=Purple HATS-win32-x64\Purple HATS-win32-x64\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 Compression=lzma
